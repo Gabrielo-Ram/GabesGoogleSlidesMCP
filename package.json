@@ -1,0 +1,40 @@
+{
+  "name": "gabesgoogleslidesmcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A central hub for my custom-made Google Slides MCP server. I will publish and refer to this repository as an npm package in other projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && chmod 755 build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabrielo-Ram/GabesGoogleSlidesMCP.git"
+  },
+  "keywords": [
+    "Google Slides MCP",
+    "Slides MCP"
+  ],
+  "author": "Gabe Ramirez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gabrielo-Ram/GabesGoogleSlidesMCP/issues"
+  },
+  "homepage": "https://github.com/Gabrielo-Ram/GabesGoogleSlidesMCP#readme",
+  "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "csv-parse": "^5.6.0",
+    "dotenv": "^17.0.1",
+    "fs": "^0.0.1-security",
+    "google-auth-library": "^10.1.0",
+    "googleapis": "^150.0.1",
+    "path": "^0.12.7",
+    "zod": "^3.25.75"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "typescript": "^5.8.3"
+  }
+}
