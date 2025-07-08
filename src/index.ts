@@ -273,7 +273,7 @@ server.tool(
 );
 
 //Main function used to connect to an MCP Client.
-async function main() {
+export async function engageServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error(
@@ -281,7 +281,7 @@ async function main() {
   );
 }
 
-main().catch((error) => {
+engageServer().catch((error) => {
   console.error("Fatal error in main(): ", error);
   process.exit(1);
 });
