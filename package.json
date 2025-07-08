@@ -1,6 +1,6 @@
 {
   "name": "@gabrielo-ram/gabesgoogleslidesmcp",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "description": "A central hub for my custom-made Google Slides MCP server. I will publish and refer to this repository as an npm package in other projects.",
   "main": "build/index.js",
