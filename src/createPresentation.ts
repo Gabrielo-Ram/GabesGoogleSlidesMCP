@@ -162,7 +162,9 @@ async function createPresentation(
 
     return presentationId;
   } catch (err) {
-    throw new Error("Failed to create presentation in createPresentation()");
+    throw new Error(
+      `createPresentation(): Could not create presentation ${err}`
+    );
   }
 }
 
@@ -213,8 +215,8 @@ export async function initiateSlides(
     const preSetParagraphContent =
       "[Insert pre-set content]\nThis is sample paragraph content";
     await addCustomSlide(
-      preSetBulletTitle,
-      preSetBulletContent,
+      preSetParagraphTitle,
+      preSetParagraphContent,
       presentationID,
       "Bullet"
     );
@@ -251,4 +253,4 @@ async function main() {
   }
 }
 
-main();
+//main();

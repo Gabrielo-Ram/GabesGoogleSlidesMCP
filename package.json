@@ -1,12 +1,16 @@
 {
-  "name": "gabesgoogleslidesmcp",
+  "name": "@gabrielo-ram/gabesgoogleslidesmcp",
   "version": "1.0.0",
   "type": "module",
   "description": "A central hub for my custom-made Google Slides MCP server. I will publish and refer to this repository as an npm package in other projects.",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && chmod 755 build/index.js"
+    "build": "tsc && chmod 755 build/index.js",
+    "prepare": "npm run build"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
