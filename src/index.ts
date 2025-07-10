@@ -45,13 +45,20 @@ const server = new McpServer({
  * )
  */
 
-const extractCompanyDataToolDescription = `This tool extracts data from a specific company from a CSV file.
-The user will provide a file or a file path to the CSV file to you. You must pass in that user input into this tool.
-This tool MUST be called before create-presentation. It returns all the necessary data to generate a Google Slides presentation.
-The user must specify the name of one company. If unclear, ask the user which company they want to create a presentation for. A user can only create a presentation for ONE company. 
+const extractDataToolDescription = `This tool extracts data from one row in a provided CSV file. The user must provide a CSV file to you before attempting to run any other tools. 
+
+This tool accepts two parameters:
+  - name: The name/title of the row of data the user wants to extract from the CSV string.
+  - csvFile: The CSV string itself. 
+
+The user will provide a CSV file, and you will recieve a string value representing that CSV file. You must pass in that CSV string as input into this tool.
+
+This tool MUST be called before create-presentation or add-custom-slide.
+
+IMPORTANT: The user MUST specify the what row of data they want to extract from the CSV. If unclear, please prompt the user to fulfill the missing information. The user can only create one presentation at a time.  
 
 The output of this tool will be one JSON object that represents data for one 
-company. Each key will represent one property in that CSV row. Each value will 
+row. Each key will represent one property in that CSV row. Each value will 
 be the data associated with that property. Here is a sample JSON object this tool
 could output: 
 
@@ -71,64 +78,53 @@ could output:
   presentationId?: string;
 };
 
-This tool provides essential company data that you will use to generate content slides for a Google Slides presentation. Carefully retain and reference the returned data throughout the slide creation process.`;
+You must use the information in this object as context to create your custom slides in a Google Slides presentation. Carefully retain and reference the returned data throughout the slide creation process.`;
 
 server.tool(
-  "extract-company-data",
-  extractCompanyDataToolDescription,
+  "extract-data",
+  extractDataToolDescription,
   {
-    companyName: z
+    name: z
       .string()
-      .describe("The name of the company who's data we want to extract."),
-    csvFile: z.string().describe("The file path to a CSV file"),
+      .describe(
+        "The name (the first property) of the row who's data we want to extract."
+      ),
+    csvFile: z.string().describe("The CSV string we are extracting data from"),
   },
-  async ({ companyName, csvFile }) => {
+  async ({ name, csvFile }) => {
     try {
-      const pathToCSV = csvFile; //THIS PARAMTER TOTATLLY DEPENDS ON HOW YOU ARE DEPLOYING YOUR APPLICATION
-      if (!pathToCSV) {
-        throw new Error(
-          "extract-company-data: csvFile not set properly. Please check how you are inputting the CSV file into this tool"
-        );
-      }
+      const lines = csvFile.trim().split("\n");
 
-      const company = await new Promise<Record<string, any> | null>(
-        (resolve, reject) => {
-          const stream = fs
-            .createReadStream(pathToCSV)
-            .pipe(parse({ columns: true, trim: true }));
+      const headers = lines[0].split(",").map((header) => header.trim());
+      const rows = lines
+        .slice(1)
+        .map((line) => line.split(",").map((cell) => cell.trim()));
 
-          stream.on("data", (row) => {
-            if (
-              row.companyName && //HOW WILL YOU KNOW THE PROPERTIES OF THE CSV FILE?
-              row.companyName.trim().toLowerCase() ===
-                companyName.trim().toLowerCase()
-            ) {
-              stream.destroy(); // stop the stream once a match is found resolve(row);
-              resolve(row);
-            }
-          });
-
-          stream.on("end", () => resolve(null)); // no match found
-          stream.on("error", reject); // on error
-        }
+      const selectedRow = rows.find(
+        (row) => row[0].trim().toLowerCase() === name.trim().toLowerCase()
       );
-
-      if (!company) {
+      if (!selectedRow) {
         return {
           content: [
             {
               type: "text",
-              text: `No company found with the name "${companyName}"`,
+              text: `Could not find a title with the name ${name}. Is it spelled correctly?`,
             },
           ],
         };
       }
 
+      const rowData: Record<string, string> = {};
+
+      headers.forEach((header, index) => {
+        rowData[header] = selectedRow[index] ?? "";
+      });
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(company),
+            text: JSON.stringify(rowData),
           },
         ],
       };
