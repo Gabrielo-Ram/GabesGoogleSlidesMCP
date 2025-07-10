@@ -26,8 +26,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const SCOPES = ["https://www.googleapis.com/auth/presentations"];
-const CREDENTIALS_PATH = path.join(__dirname, "../credentials.json");
-const TOKEN_PATH = path.join(__dirname, "../token.json");
+const CREDENTIALS_PATH = path.resolve("./secrets/credentials.json");
+const TOKEN_PATH = path.resolve("./secrets/token.json");
 
 /* ----———————————————————————————————————————————————--- */
 /**
