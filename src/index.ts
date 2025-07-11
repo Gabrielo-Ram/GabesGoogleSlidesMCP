@@ -45,15 +45,13 @@ const server = new McpServer({
  * )
  */
 
-const extractDataToolDescription = `This tool extracts data from one row in a provided CSV file. The user must provide a CSV file to you before attempting to run any other tools. 
+const extractDataToolDescription = `This tool extracts data from one row in a provided CSV file. This tool is totally optional, only call this tool if the user provides a CSV file to be read. 
 
 This tool accepts two parameters:
   - name: The name/title of the row of data the user wants to extract from the CSV string.
   - csvFile: The CSV string itself. 
 
 The user will provide a CSV file, and you will recieve a string value representing that CSV file. You must pass in that CSV string as input into this tool.
-
-This tool MUST be called before create-presentation or add-custom-slide.
 
 IMPORTANT: The user MUST specify the what row of data they want to extract from the CSV. If unclear, please prompt the user to fulfill the missing information. The user can only create one presentation at a time.  
 
@@ -144,9 +142,8 @@ server.tool(
 );
 
 const createPresentationToolDescription = `A tool used to create and style a Google Slides presentation into the user's account. 
-You must call 'extract-company-data' before running this tool.
 
-This tool creates ONE presentation for ONE set of company data. 
+This tool creates ONE presentation. The user can only create one presentation at a time. 
 
 This tool's only paramater is a the title of the presentation you want to create (usually the name of the company).
 
@@ -200,16 +197,17 @@ server.tool(
   }
 );
 
-const addCustomSlideToolDescription = `This tool allows the user to create a custom slide based on company data.
-If you already don't have data for a specific company, you MUST call extract-company-data before you run this tool. You will use the output of extract-company-data to create content for a custom slide in this server tool. 
+const addCustomSlideToolDescription = `This tool allows you to create a custom slide based on any content/context you create/have.
+
+The user can create a maximum of 10 custom slides at at time. The content and styling of custom slide is entirely up to your discretion.
 
 This tool's parameters are the following: 
 - A custom title for this new slide you create. Make up your own title.
-- A paragraph you compose based on the user's request. You must use the data extracted from extract-company-data as context for the writing you produce. 
-- The presentationID for the most recent presentation you've created. This is a string value.
-- A string value that is either: "Paragraph" or "Bullet". The user will specify what kind of slide they want to create (either a paragraph or bulleted slide). If they do not, ask the user to fill in this information before you call this tool.
+- Text content you compose based on the user's request. You must use the data extracted from extract-company-data as context for the writing you produce. If you decide the content of this slide is writting in bullet-form, create a new line to seperate each "bullet point" 
+- The presentationID for the most recent, or most appropriate, presentation you've created. This is a string value.
+- A string value that one the following: "Paragraph" or "Bullet". The user may or may not specify what slide type they want to create. If they do not, adjust this input so that it will best fit the content that will go inside this slide.
 
-You DO NOT NEED to create a new presentation when you run this tool. Simply retrieve the presentationID that was returned when you first ran the create-presentation tool.`;
+You DO NOT NEED to create a new presentation when you run this tool. Simply retrieve the presentationID that was returned when you ran the create-presentation tool.`;
 
 server.tool(
   "add-custom-slide",
@@ -227,7 +225,7 @@ server.tool(
     slideType: z
       .string()
       .describe(
-        "The literal strings 'Paragraph' or 'Bullet' that specifies what kind of slide this tool will create"
+        "One of the literal strings 'Paragraph' or 'Bullet' that specifies what kind of slide this tool will create"
       ),
   },
   async ({ slideTitle, slideContent, presentationId, slideType }) => {

@@ -200,26 +200,26 @@ export async function initiateSlides(
     */
 
     //Adds a new Bullet Slide
-    const preSetBulletTitle = "[Insert pre-set title]";
-    const preSetBulletContent =
-      "[Insert pre-set content]\nThis is sample bullet content";
-    await addCustomSlide(
-      preSetBulletTitle,
-      preSetBulletContent,
-      presentationID,
-      "Bullet"
-    );
+    // const preSetBulletTitle = "[Insert pre-set title]";
+    // const preSetBulletContent =
+    //   "[Insert pre-set content]\nThis is sample bullet content";
+    // await addCustomSlide(
+    //   preSetBulletTitle,
+    //   preSetBulletContent,
+    //   presentationID,
+    //   "Bullet"
+    // );
 
-    //Formats data and creates a 'Paragraph' slide
-    const preSetParagraphTitle = "[Insert pre-set title]";
-    const preSetParagraphContent =
-      "[Insert pre-set content]\nThis is sample paragraph content";
-    await addCustomSlide(
-      preSetParagraphTitle,
-      preSetParagraphContent,
-      presentationID,
-      "Bullet"
-    );
+    // //Formats data and creates a 'Paragraph' slide
+    // const preSetParagraphTitle = "[Insert pre-set title]";
+    // const preSetParagraphContent =
+    //   "[Insert pre-set content]\nThis is sample paragraph content";
+    // await addCustomSlide(
+    //   preSetParagraphTitle,
+    //   preSetParagraphContent,
+    //   presentationID,
+    //   "Bullet"
+    // );
 
     console.error(`\nCreated presentation with ID: ${newPresentationId}`);
     return newPresentationId;
